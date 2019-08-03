@@ -6,11 +6,14 @@ import com.maitrongnghia.restapi.dao.UserRepository;
 import com.maitrongnghia.restapi.model.Classroom;
 import com.maitrongnghia.restapi.model.Course;
 import com.maitrongnghia.restapi.model.User;
+import org.h2.api.TimestampWithTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -36,7 +39,8 @@ public class Controler {
         return userRepository.findUserByRole(Integer.parseInt(role));
     }
 
-    @RequestMapping(path="add/adduser",method = RequestMethod.GET)
+    @RequestMapping(path="/add/adduser",method = RequestMethod.GET)
+    @Transactional
     public String addUser(@RequestParam  String name,@RequestParam String role){
         userRepository.save(new User(name,Integer.parseInt(role)));
         return "insert sucsses";
@@ -93,8 +97,16 @@ public class Controler {
     }
 
     @RequestMapping(path = "/get/getlistclassromm", method = RequestMethod.GET)
-    public List<Classroom> getListClassroom() {
-        return classRepository.getClassroomByCourseIdAndKidIdAndTeacherId(1, 2, 1);
+    public List<Classroom> getListClassroom(@RequestParam String courseid,@RequestParam String kidid,@RequestParam String teacherid) {
+        long courseId = Long.parseLong(courseid);
+        long kidId = Long.parseLong(kidid);
+        long teacherId = Long.parseLong(teacherid);
+        return classRepository.getClassroomByCourseIdAndKidIdAndTeacherId(courseId, kidId, teacherId);
+    }
+    @RequestMapping(path = "/get/getlistclassrommwithtime", method = RequestMethod.GET)
+    public List<Classroom> getListClassroomWithTime() {
+        return classRepository.findClassroom();
+
     }
 
 }

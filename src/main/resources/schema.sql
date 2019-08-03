@@ -18,7 +18,7 @@ CREATE TABLE  classroom (
   courseid INT NOT NULL,
   teacherid INT NOT NULL,
   kidid INT NOT NULL,
-  starttime TIMESTAMP NOT NULL,
+  starttime TIME NOT NULL,
   status INT NOT NULL COMMENT 'status = 0: not open\nstatus = 1: open',
   PRIMARY KEY (id),
   CONSTRAINT FK_USER_CLASSROOM
